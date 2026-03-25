@@ -125,6 +125,12 @@
             box-shadow: 0 0 15px var(--neon-glow), inset 0 0 10px rgba(0, 0, 0, 0.5);
             background: rgba(17, 26, 122, 0.1);
         }
+        
+        /* Error state styling for invalid pattern */
+        input:not(:placeholder-shown):invalid {
+            border-color: #ff4a4a;
+            box-shadow: 0 0 10px rgba(255, 74, 74, 0.3);
+        }
 
         /* Submit Button */
         button {
@@ -226,7 +232,7 @@
 
                 <div class="form-group">
                     <label for="microchip">Pet Microchip Number</label>
-                    <input type="text" id="microchip" name="Pet Microchip Number" required placeholder="e.g. 981020000000000">
+                    <input type="text" id="microchip" name="Pet Microchip Number" required placeholder="e.g. 981020000000000" pattern="^(?:(?=.*[a-zA-Z])[a-zA-Z0-9]{10}|\d{15})$" title="Must be either 15 digits or a 10-character alphanumeric ID containing at least one letter.">
                 </div>
 
                 <button type="submit" id="submit-btn">Initiate Search</button>
