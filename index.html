@@ -234,7 +234,7 @@
         </div>
 
         <div id="success-message">
-            <div class="loader"></div>
+            <div class="loader" id="loading-spinner"></div>
             Querying PetID Registry, will contact you shortly.
         </div>
     </div>
@@ -243,6 +243,7 @@
         const form = document.getElementById('registry-form');
         const formContainer = document.getElementById('form-container');
         const successMessage = document.getElementById('success-message');
+        const loadingSpinner = document.getElementById('loading-spinner');
 
         form.addEventListener('submit', async function(event) {
             event.preventDefault(); // Prevent standard redirect
@@ -262,6 +263,17 @@
                     // Hide form and show custom futuristic message
                     formContainer.style.display = 'none';
                     successMessage.style.display = 'block';
+                    
+                    // Reset spinner display in case of multiple submissions without reload
+                    if (loadingSpinner) {
+                        loadingSpinner.style.display = 'block';
+                        
+                        // Hide the loading spinner after 70 seconds (70000 ms)
+                        setTimeout(() => {
+                            loadingSpinner.style.display = 'none';
+                        }, 70000);
+                    }
+
                     form.reset();
                 } else {
                     alert('Error connecting to the registry. Please try again.');
