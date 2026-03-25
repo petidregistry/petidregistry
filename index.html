@@ -17,6 +17,7 @@
             --bg-color: #060913;
             --text-main: #e0e5ff;
             --neon-glow: rgba(44, 54, 131, 0.6);
+            --error-color: #ff4a4a;
         }
 
         /* Global Styles */
@@ -96,6 +97,7 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 20px;
+            position: relative;
         }
 
         label {
@@ -118,6 +120,8 @@
             outline: none;
             transition: all 0.3s ease;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            box-sizing: border-box;
         }
 
         input:focus {
@@ -126,10 +130,28 @@
             background: rgba(17, 26, 122, 0.1);
         }
         
-        /* Error state styling for invalid pattern */
+        /* Validation Styling */
         input:not(:placeholder-shown):invalid {
-            border-color: #ff4a4a;
-            box-shadow: 0 0 10px rgba(255, 74, 74, 0.3);
+            border-color: var(--error-color);
+            box-shadow: 0 0 10px rgba(255, 74, 74, 0.2);
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        /* Show the error message only when the input is invalid and not empty */
+        input:not(:placeholder-shown):invalid ~ .error-message {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Submit Button */
@@ -232,7 +254,8 @@
 
                 <div class="form-group">
                     <label for="microchip">Pet Microchip Number</label>
-                    <input type="text" id="microchip" name="Pet Microchip Number" required placeholder="e.g. 981020000000000" pattern="^(?:(?=.*[a-zA-Z])[a-zA-Z0-9]{10}|\d{15})$" title="Must be either 15 digits or a 10-character alphanumeric ID containing at least one letter.">
+                    <input type="text" id="microchip" name="Pet Microchip Number" required placeholder="e.g. 981020000000000" pattern="^(?:(?=.*[a-zA-Z])[a-zA-Z0-9]{10}|\d{15})$">
+                    <div class="error-message">The Pet Microchip Number is invalid. Please try again.</div>
                 </div>
 
                 <button type="submit" id="submit-btn">Initiate Search</button>
