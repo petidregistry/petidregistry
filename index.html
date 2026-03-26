@@ -18,6 +18,8 @@
             --text-light: #e0f7fa;
         }
 
+        * { box-sizing: border-box; }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-light);
@@ -27,52 +29,53 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 40px 20px;
-            box-sizing: border-box;
+            padding: 20px;
         }
 
         .form-container {
-            background: rgba(0, 10, 40, 0.7);
-            padding: 50px;
+            background: rgba(0, 10, 40, 0.8);
+            padding: 40px;
             border-radius: 15px;
             border: 1px solid var(--neon-blue);
             box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
             backdrop-filter: blur(10px);
             width: 100%;
             max-width: 650px;
+            position: relative;
+            overflow: hidden;
         }
 
         h1 {
             font-family: 'Tektur', sans-serif;
-            font-size: 56px;
+            font-size: clamp(32px, 8vw, 56px); /* Responsive font scaling */
             text-align: center;
             color: var(--neon-blue);
             text-shadow: 0 0 15px var(--neon-blue);
-            margin-top: 0;
-            margin-bottom: 40px;
+            margin: 0 0 40px 0;
             text-transform: uppercase;
         }
 
-        .form-group {
-            margin-bottom: 25px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--neon-blue);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         input[type="text"], input[type="email"], input[type="tel"], input[type="url"] {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: rgba(0, 0, 0, 0.4);
             border: 2px solid var(--neon-blue-dark);
             border-radius: 5px;
             color: #ffffff;
             font-size: 16px;
-            box-sizing: border-box;
+            transition: 0.3s;
         }
 
         input:focus {
@@ -85,35 +88,38 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin: 30px 0 10px 0;
+            margin: 25px 0 5px 0;
         }
 
         input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
+            accent-color: var(--neon-blue);
         }
 
         .error-msg {
             color: var(--error-red);
-            font-size: 14px;
-            margin-top: 8px;
+            font-size: 13px;
+            margin-top: 5px;
             display: none;
             font-weight: 600;
+            text-shadow: 0 0 5px var(--error-red);
         }
 
         button {
             background: transparent;
             color: var(--neon-blue);
             border: 2px solid var(--neon-blue);
-            padding: 18px;
+            padding: 15px;
             font-family: 'Tektur', sans-serif;
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
             width: 100%;
             border-radius: 5px;
             margin-top: 20px;
             transition: 0.3s;
+            text-transform: uppercase;
         }
 
         button:hover {
@@ -122,61 +128,67 @@
             box-shadow: 0 0 25px var(--neon-blue);
         }
 
+        /* Success Message Overlay */
+        #success-overlay {
+            display: none;
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #success-overlay h2 {
+            font-family: 'Tektur', sans-serif;
+            color: var(--neon-blue);
+            font-size: 32px;
+        }
+
         #loading {
             display: none;
             text-align: center;
             color: var(--neon-blue);
             margin-top: 20px;
             font-family: 'Tektur', sans-serif;
+            letter-spacing: 2px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            .form-container { padding: 25px; }
+            h1 { margin-bottom: 25px; }
         }
     </style>
 </head>
 <body>
 
     <div class="form-container">
+        <div id="success-overlay">
+            <h2>Thanks for your registration</h2>
+            <button onclick="location.reload()" style="width: auto; padding: 10px 30px; font-size: 16px;">Add Another</button>
+        </div>
+
         <h1>Register Pet</h1>
         
         <form id="petForm">
-            <div class="form-group">
-                <label>Owner's First Name</label>
-                <input type="text" name="OwnerFirstName" required>
-            </div>
-
-            <div class="form-group">
-                <label>Owner's Second Name</label>
-                <input type="text" name="OwnerSecondName" required>
-            </div>
-
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="Email" required>
-            </div>
-
-            <div class="form-group">
-                <label>Phone</label>
-                <input type="tel" name="Phone" required>
-            </div>
-
-            <div class="form-group">
-                <label>Pet Name</label>
-                <input type="text" name="PetName" required>
-            </div>
-
+            <div class="form-group"><label>First Name</label><input type="text" name="OwnerFirstName" required></div>
+            <div class="form-group"><label>Second Name</label><input type="text" name="OwnerSecondName" required></div>
+            <div class="form-group"><label>Email</label><input type="email" name="Email" required></div>
+            <div class="form-group"><label>Phone</label><input type="tel" name="Phone" required></div>
+            <div class="form-group"><label>Pet Name</label><input type="text" name="PetName" required></div>
+            
             <div class="form-group">
                 <label>Microchip Number</label>
                 <input type="text" id="microchip" name="Microchip" required>
                 <div id="microchipError" class="error-msg">The Microchip Number is invalid. Please try again.</div>
             </div>
 
-            <div class="form-group">
-                <label>Microchip Sticker Photo URL</label>
-                <input type="url" name="Sticker" required>
-            </div>
-
-            <div class="form-group">
-                <label>Pet Photo URL</label>
-                <input type="url" name="PetPhoto" required>
-            </div>
+            <div class="form-group"><label>Sticker URL</label><input type="url" name="Sticker" required></div>
+            <div class="form-group"><label>Pet Photo URL</label><input type="url" name="PetPhoto" required></div>
 
             <div class="checkbox-group">
                 <input type="checkbox" id="paid" name="Paid" value="Yes">
@@ -185,12 +197,11 @@
             <div id="paidError" class="error-msg">Please pay to proceed. Thank you.</div>
 
             <button type="submit" id="submitBtn">Submit Data</button>
-            <div id="loading">TRANSMITTING...</div>
+            <div id="loading">UPLOADING TO MAINFRAME...</div>
         </form>
     </div>
 
     <script>
-        // Replace with your actual script URL
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxLpRacIFdkmLomRRZqCigw6GHbK9dJ0tc83AJJ39Kpi3_HgAYV0GQ-DlJAMRPpFnZM1A/exec';
 
         document.getElementById('petForm').addEventListener('submit', function(e) {
@@ -198,48 +209,39 @@
             
             const microchip = document.getElementById('microchip').value;
             const paid = document.getElementById('paid').checked;
-            const microchipError = document.getElementById('microchipError');
-            const paidError = document.getElementById('paidError');
             
-            // Validation
+            // Validation Logic
             let isValid = true;
             if (!/^\d{15}$/.test(microchip)) {
-                microchipError.style.display = 'block';
+                document.getElementById('microchipError').style.display = 'block';
                 isValid = false;
-            } else { microchipError.style.display = 'none'; }
+            } else { document.getElementById('microchipError').style.display = 'none'; }
 
             if (!paid) {
-                paidError.style.display = 'block';
+                document.getElementById('paidError').style.display = 'block';
                 isValid = false;
-            } else { paidError.style.display = 'none'; }
+            } else { document.getElementById('paidError').style.display = 'none'; }
 
             if (!isValid) return;
 
-            // UI Changes
             document.getElementById('submitBtn').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
 
-            // Prepare Data
             const formData = new FormData(this);
             formData.append('PUID', 'PET-' + Date.now());
-
-            // Convert FormData to URLSearchParams for better Google compatibility
             const params = new URLSearchParams(formData);
 
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 body: params,
-                mode: 'no-cors' // This bypasses CORS issues
+                mode: 'no-cors'
             })
             .then(() => {
-                alert("Data Sent! Check your spreadsheet in a few seconds.");
-                document.getElementById('petForm').reset();
+                // Show Success Message
+                document.getElementById('success-overlay').style.display = 'flex';
             })
             .catch(err => {
-                alert("Error sending data.");
-                console.error(err);
-            })
-            .finally(() => {
+                alert("Critical Link Error. Please check your connection.");
                 document.getElementById('submitBtn').style.display = 'block';
                 document.getElementById('loading').style.display = 'none';
             });
