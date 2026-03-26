@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pet Registration</title>
+    <title>Pet Registration - Futuristic UI</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,11 +32,11 @@
         }
 
         .form-container {
-            background: rgba(0, 10, 40, 0.6);
+            background: rgba(0, 10, 40, 0.7);
             padding: 50px;
             border-radius: 15px;
             border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.15), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
             backdrop-filter: blur(10px);
             width: 100%;
             max-width: 650px;
@@ -47,89 +47,51 @@
             font-size: 56px;
             text-align: center;
             color: var(--neon-blue);
-            text-shadow: 0 0 15px var(--neon-blue), 0 0 30px var(--neon-blue-dark);
+            text-shadow: 0 0 15px var(--neon-blue);
             margin-top: 0;
             margin-bottom: 40px;
             text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
         .form-group {
             margin-bottom: 25px;
-            position: relative;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            letter-spacing: 1px;
             color: var(--neon-blue);
-            text-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
         }
 
-        input[type="text"], 
-        input[type="email"], 
-        input[type="tel"], 
-        input[type="url"] {
+        input[type="text"], input[type="email"], input[type="tel"], input[type="url"] {
             width: 100%;
             padding: 14px;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             border: 2px solid var(--neon-blue-dark);
             border-radius: 5px;
             color: #ffffff;
-            font-family: 'IBM Plex Sans', sans-serif;
             font-size: 16px;
-            transition: all 0.3s ease;
             box-sizing: border-box;
         }
 
         input:focus {
             outline: none;
             border-color: var(--neon-blue);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
-            background: rgba(0, 243, 255, 0.05);
+            box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        /* Checkbox styling */
         .checkbox-group {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-top: 30px;
-            margin-bottom: 10px;
-        }
-
-        .checkbox-group label {
-            margin-bottom: 0;
-            cursor: pointer;
+            margin: 30px 0 10px 0;
         }
 
         input[type="checkbox"] {
-            appearance: none;
             width: 24px;
             height: 24px;
-            border: 2px solid var(--neon-blue);
-            border-radius: 4px;
-            background: transparent;
             cursor: pointer;
-            position: relative;
-            transition: 0.3s;
-        }
-
-        input[type="checkbox"]:checked {
-            background: var(--neon-blue);
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
-
-        input[type="checkbox"]:checked::after {
-            content: '✔';
-            position: absolute;
-            color: var(--bg-color);
-            font-size: 18px;
-            left: 3px;
-            top: -1px;
-            font-family: sans-serif;
         }
 
         .error-msg {
@@ -137,7 +99,6 @@
             font-size: 14px;
             margin-top: 8px;
             display: none;
-            text-shadow: 0 0 8px rgba(255, 0, 85, 0.6);
             font-weight: 600;
         }
 
@@ -145,18 +106,14 @@
             background: transparent;
             color: var(--neon-blue);
             border: 2px solid var(--neon-blue);
-            padding: 18px 30px;
+            padding: 18px;
             font-family: 'Tektur', sans-serif;
             font-size: 24px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
             cursor: pointer;
-            transition: 0.3s;
             width: 100%;
             border-radius: 5px;
-            margin-top: 30px;
-            position: relative;
-            overflow: hidden;
+            margin-top: 20px;
+            transition: 0.3s;
         }
 
         button:hover {
@@ -181,44 +138,44 @@
         
         <form id="petForm">
             <div class="form-group">
-                <label for="ownerFirstName">Owner's First Name</label>
-                <input type="text" id="ownerFirstName" name="OwnerFirstName" required>
+                <label>Owner's First Name</label>
+                <input type="text" name="OwnerFirstName" required>
             </div>
 
             <div class="form-group">
-                <label for="ownerSecondName">Owner's Second Name</label>
-                <input type="text" id="ownerSecondName" name="OwnerSecondName" required>
+                <label>Owner's Second Name</label>
+                <input type="text" name="OwnerSecondName" required>
             </div>
 
             <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="Email" required>
+                <label>Email</label>
+                <input type="email" name="Email" required>
             </div>
 
             <div class="form-group">
-                <label for="phone">Phone</label>
-                <input type="tel" id="phone" name="Phone" required>
+                <label>Phone</label>
+                <input type="tel" name="Phone" required>
             </div>
 
             <div class="form-group">
-                <label for="petName">Pet Name</label>
-                <input type="text" id="petName" name="PetName" required>
+                <label>Pet Name</label>
+                <input type="text" name="PetName" required>
             </div>
 
             <div class="form-group">
-                <label for="microchip">Microchip Number</label>
+                <label>Microchip Number</label>
                 <input type="text" id="microchip" name="Microchip" required>
                 <div id="microchipError" class="error-msg">The Microchip Number is invalid. Please try again.</div>
             </div>
 
             <div class="form-group">
-                <label for="stickerUrl">Microchip Sticker Photo URL</label>
-                <input type="url" id="stickerUrl" name="Sticker" required>
+                <label>Microchip Sticker Photo URL</label>
+                <input type="url" name="Sticker" required>
             </div>
 
             <div class="form-group">
-                <label for="petPhotoUrl">Pet Photo URL</label>
-                <input type="url" id="petPhotoUrl" name="PetPhoto" required>
+                <label>Pet Photo URL</label>
+                <input type="url" name="PetPhoto" required>
             </div>
 
             <div class="checkbox-group">
@@ -228,66 +185,61 @@
             <div id="paidError" class="error-msg">Please pay to proceed. Thank you.</div>
 
             <button type="submit" id="submitBtn">Submit Data</button>
-            <div id="loading">TRANSMITTING DATA...</div>
+            <div id="loading">TRANSMITTING...</div>
         </form>
     </div>
 
     <script>
-        // REPLACE THIS URL with your Google Apps Script Web App URL (See instructions below)
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyqe0UKon-XZD7mjnhD8jCAvxs5WDVC__-nd_9NTdzWZdDZTen2JLjTgVr_LQdA7pUxOw/exec';
+        // Replace with your actual script URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4qFGTBDfk1zhO2smavahll1P0uOSNrNKNi4kpgGjJRNiSokbm-dySryytqOTCUMi4SQ/exec';
 
-        document.getElementById('petForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-            
-            // Reset error messages
-            document.getElementById('microchipError').style.display = 'none';
-            document.getElementById('paidError').style.display = 'none';
+        document.getElementById('petForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
             const microchip = document.getElementById('microchip').value;
             const paid = document.getElementById('paid').checked;
+            const microchipError = document.getElementById('microchipError');
+            const paidError = document.getElementById('paidError');
             
+            // Validation
             let isValid = true;
-            
-            // Validation 1: Microchip Number (Exactly 15 numeric digits)
-            const microchipRegex = /^\d{15}$/;
-            if (!microchipRegex.test(microchip)) {
-                document.getElementById('microchipError').style.display = 'block';
+            if (!/^\d{15}$/.test(microchip)) {
+                microchipError.style.display = 'block';
                 isValid = false;
-            }
-            
-            // Validation 2: Paid Checkbox
+            } else { microchipError.style.display = 'none'; }
+
             if (!paid) {
-                document.getElementById('paidError').style.display = 'block';
+                paidError.style.display = 'block';
                 isValid = false;
-            }
-            
-            // Block submission if invalid
+            } else { paidError.style.display = 'none'; }
+
             if (!isValid) return;
 
-            // UI feedback while loading
+            // UI Changes
             document.getElementById('submitBtn').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
 
-            // Collect form data
+            // Prepare Data
             const formData = new FormData(this);
-            // Append a timestamp or auto-generate PUID if you wish on the frontend
-            formData.append('PUID', 'PUID-' + Math.floor(Math.random() * 100000));
+            formData.append('PUID', 'PET-' + Date.now());
 
-            // Send data to Google Sheets via Apps Script
+            // Convert FormData to URLSearchParams for better Google compatibility
+            const params = new URLSearchParams(formData);
+
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
-                body: formData
+                body: params,
+                mode: 'no-cors' // This bypasses CORS issues
             })
-            .then(response => {
-                alert("Pet Registered Successfully!");
+            .then(() => {
+                alert("Data Sent! Check your spreadsheet in a few seconds.");
                 document.getElementById('petForm').reset();
             })
-            .catch(error => {
-                console.error('Error!', error.message);
-                alert("An error occurred. Please try again.");
+            .catch(err => {
+                alert("Error sending data.");
+                console.error(err);
             })
             .finally(() => {
-                // Restore UI
                 document.getElementById('submitBtn').style.display = 'block';
                 document.getElementById('loading').style.display = 'none';
             });
