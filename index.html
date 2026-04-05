@@ -67,8 +67,8 @@
             letter-spacing: 1px;
         }
 
-        /* Added file input to selector */
-        input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="file"] {
+        /* Added select and textarea to the global input styling */
+        input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="file"], select, textarea {
             width: 100%;
             padding: 12px;
             background: rgba(0, 0, 0, 0.4);
@@ -76,13 +76,25 @@
             border-radius: 5px;
             color: #ffffff;
             font-size: 16px;
+            font-family: 'IBM Plex Sans', sans-serif;
             transition: 0.3s;
         }
 
-        input:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: var(--neon-blue);
             box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        /* Styling dropdown options so they don't look white-on-white in some browsers */
+        select option {
+            background-color: var(--bg-color);
+            color: #ffffff;
+        }
+
+        /* Restrict textarea resizing to vertical only to keep UI intact */
+        textarea {
+            resize: vertical;
         }
 
         /* Styling for the custom file upload button to match your UI */
@@ -212,6 +224,21 @@
             <div class="form-group"><label>Upload Microchip Sticker Photo</label><input type="file" id="stickerFile" accept="image/*" required></div>
             <div class="form-group"><label>Upload Pet Photo</label><input type="file" id="petPhotoFile" accept="image/*" required></div>
 
+            <div class="form-group">
+                <label>Choose pet Gender</label>
+                <select name="Gender" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Unknown">Unknown / Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Please add description</label>
+                <textarea name="Description" rows="3" placeholder="Breed, color, distinct markings..." required></textarea>
+            </div>
+
             <div class="checkbox-group">
                 <input type="checkbox" id="paid" name="Paid" value="Yes">
                 <label for="paid">Paid</label>
@@ -224,7 +251,7 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxF4VWgOlX0AvozOVrtqRAyQvlzfQKRobYjn4UwyIoZtK5Z738sEH_9H5GtG2aPZTcP7Q/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzQk3aW5tdVPW3GzLC_6D4haYxEygKJayxbYHmHnChM9_9vSITsuVuO5RR255my4K-3Ag/exec';
 
         // Helper function to read file as Base64 string
         const getBase64 = (file) => new Promise((resolve, reject) => {
