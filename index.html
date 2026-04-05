@@ -67,7 +67,8 @@
             letter-spacing: 1px;
         }
 
-        input[type="text"], input[type="email"], input[type="tel"], input[type="url"] {
+        /* Added file input to selector */
+        input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="file"] {
             width: 100%;
             padding: 12px;
             background: rgba(0, 0, 0, 0.4);
@@ -82,6 +83,27 @@
             outline: none;
             border-color: var(--neon-blue);
             box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        /* Styling for the custom file upload button to match your UI */
+        input[type="file"]::file-selector-button {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 1px solid var(--neon-blue);
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 15px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            text-transform: uppercase;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: var(--neon-blue);
+            color: var(--bg-color);
+            box-shadow: 0 0 10px var(--neon-blue);
         }
 
         .checkbox-group {
@@ -187,8 +209,8 @@
                 <div id="microchipError" class="error-msg">The Microchip Number is invalid. Please try again.</div>
             </div>
 
-            <div class="form-group"><label>Sticker URL</label><input type="url" name="Sticker" required></div>
-            <div class="form-group"><label>Pet Photo URL</label><input type="url" name="PetPhoto" required></div>
+            <div class="form-group"><label>Upload Microchip Sticker Photo</label><input type="file" id="stickerFile" accept="image/*" required></div>
+            <div class="form-group"><label>Upload Pet Photo</label><input type="file" id="petPhotoFile" accept="image/*" required></div>
 
             <div class="checkbox-group">
                 <input type="checkbox" id="paid" name="Paid" value="Yes">
@@ -197,14 +219,24 @@
             <div id="paidError" class="error-msg">Please pay to proceed. Thank you.</div>
 
             <button type="submit" id="submitBtn">Register My Pet</button>
-            <div id="loading">UPLOADING TO PETID REGISTRY...</div>
+            <div id="loading">UPLOADING TO PETID REGISTRY...<br><small style="font-size:12px; font-family:'IBM Plex Sans', sans-serif;">(This may take a moment while securing images)</small></div>
         </form>
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzhh5dfqTWyHovz4Mtbp7UuKLV-ihu9CuWJomwe8mP1p7_MTstjASvTEOLBDKjoIs-O/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVY0FfsvEnj3rBw7edZYEHJ9eFR2da8JXinRqJ-Ol02wUuj_G54fC81euS0w6aZ_E3CQ/exec';
 
-        document.getElementById('petForm').addEventListener('submit', function(e) {
+        // Helper function to read file as Base64 string
+        const getBase64 = (file) => new Promise((resolve, reject) => {
+            if (!file) return resolve(null);
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result.split(',')[1]); // extract only the Base64 chunk
+            reader.onerror = error => reject(error);
+        });
+
+        // Notice the 'async' added here
+        document.getElementById('petForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const microchip = document.getElementById('microchip').value;
@@ -227,24 +259,55 @@
             document.getElementById('submitBtn').style.display = 'none';
             document.getElementById('loading').style.display = 'block';
 
-            const formData = new FormData(this);
-            formData.append('PUID', 'PET-' + Date.now());
-            const params = new URLSearchParams(formData);
+            try {
+                // Grab files
+                const stickerFile = document.getElementById('stickerFile').files[0];
+                const petPhotoFile = document.getElementById('petPhotoFile').files[0];
 
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                body: params,
-                mode: 'no-cors'
-            })
-            .then(() => {
-                // Show Success Message
-                document.getElementById('success-overlay').style.display = 'flex';
-            })
-            .catch(err => {
-                alert("Critical Link Error. Please check your connection.");
+                // Convert to Base64
+                const stickerBase64 = await getBase64(stickerFile);
+                const petPhotoBase64 = await getBase64(petPhotoFile);
+
+                // Build Form Data
+                const formData = new FormData(this);
+                formData.append('PUID', 'PET-' + Date.now());
+                
+                // Append Base64 image payload to bypass default fetch file-handling limits
+                if (stickerFile) {
+                    formData.append('StickerBase64', stickerBase64);
+                    formData.append('StickerFileName', 'Sticker_' + Date.now() + '_' + stickerFile.name);
+                    formData.append('StickerMimeType', stickerFile.type);
+                }
+                
+                if (petPhotoFile) {
+                    formData.append('PetPhotoBase64', petPhotoBase64);
+                    formData.append('PetPhotoFileName', 'Pet_' + Date.now() + '_' + petPhotoFile.name);
+                    formData.append('PetPhotoMimeType', petPhotoFile.type);
+                }
+
+                const params = new URLSearchParams(formData);
+
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: params,
+                    mode: 'no-cors'
+                })
+                .then(() => {
+                    // Show Success Message
+                    document.getElementById('success-overlay').style.display = 'flex';
+                })
+                .catch(err => {
+                    alert("Critical Link Error. Please check your connection.");
+                    document.getElementById('submitBtn').style.display = 'block';
+                    document.getElementById('loading').style.display = 'none';
+                });
+
+            } catch (error) {
+                alert("Error processing the photos. Please try again.");
                 document.getElementById('submitBtn').style.display = 'block';
                 document.getElementById('loading').style.display = 'none';
-            });
+                console.error(error);
+            }
         });
     </script>
 </body>
