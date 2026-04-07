@@ -262,7 +262,6 @@
             reader.onerror = error => reject(error);
         });
 
-        // Notice the 'async' added here
         document.getElementById('petForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -320,6 +319,22 @@
                     mode: 'no-cors'
                 })
                 .then(() => {
+                    // --- NEW EMAIL FUNCTIONALITY ADDED HERE ---
+                    // Sending a background AJAX request to formsubmit.co to handle the email
+                    fetch("https://formsubmit.co/ajax/petid.registry@gmail.com", {
+                        method: "POST",
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: "We have a new registration!",
+                            _subject: "New Pet Registration Alert",
+                            _replyto: formData.get("Email") // Optional: Lets you reply directly to the registrant
+                        })
+                    }).catch(error => console.log("Email alert failed to send", error));
+                    // ------------------------------------------
+
                     // Show Success Message
                     document.getElementById('success-overlay').style.display = 'flex';
                 })
