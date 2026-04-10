@@ -242,10 +242,6 @@
                     <input type="checkbox" id="paid" name="Paid" value="Yes">
                     <label for="paid">Paid</label>
                 </div>
-                <div class="checkbox-group">
-                    <input type="checkbox" id="vaxCheck" name="ForVaccinated" value="ForVaccinated">
-                    <label for="vaxCheck">Vaccinated</label>
-                </div>
             </div>
             
             <div id="paidError" class="error-msg">Please pay to proceed. Thank you.</div>
@@ -298,11 +294,6 @@
                 const formData = new FormData(this);
                 formData.append('PUID', 'PET-' + Date.now());
                 
-                // If checkbox is NOT checked, explicitly send empty string for Column N
-                if (!document.getElementById('vaxCheck').checked) {
-                    formData.set('ForVaccinated', '');
-                }
-
                 if (stickerFile) {
                     formData.append('StickerBase64', stickerBase64);
                     formData.append('StickerFileName', 'Sticker_' + Date.now() + '_' + stickerFile.name);
