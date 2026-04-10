@@ -47,7 +47,7 @@
 
         h1 {
             font-family: 'Tektur', sans-serif;
-            font-size: clamp(32px, 8vw, 56px); /* Responsive font scaling */
+            font-size: clamp(32px, 8vw, 56px);
             text-align: center;
             color: var(--neon-blue);
             text-shadow: 0 0 15px var(--neon-blue);
@@ -67,7 +67,6 @@
             letter-spacing: 1px;
         }
 
-        /* Added select and textarea to the global input styling */
         input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="file"], select, textarea {
             width: 100%;
             padding: 12px;
@@ -86,18 +85,13 @@
             box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        /* Styling dropdown options so they don't look white-on-white in some browsers */
         select option {
             background-color: var(--bg-color);
             color: #ffffff;
         }
 
-        /* Restrict textarea resizing to vertical only to keep UI intact */
-        textarea {
-            resize: vertical;
-        }
+        textarea { resize: vertical; }
 
-        /* Styling for the custom file upload button to match your UI */
         input[type="file"]::file-selector-button {
             background: transparent;
             color: var(--neon-blue);
@@ -118,11 +112,17 @@
             box-shadow: 0 0 10px var(--neon-blue);
         }
 
+        .checkbox-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
         .checkbox-group {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin: 25px 0 5px 0;
         }
 
         input[type="checkbox"] {
@@ -162,7 +162,6 @@
             box-shadow: 0 0 25px var(--neon-blue);
         }
 
-        /* Success Message Overlay */
         #success-overlay {
             display: none;
             position: absolute;
@@ -191,7 +190,6 @@
             letter-spacing: 2px;
         }
 
-        /* Responsive Adjustments */
         @media (max-width: 480px) {
             .form-container { padding: 25px; }
             h1 { margin-bottom: 25px; }
@@ -239,10 +237,17 @@
                 <textarea name="Description" rows="3" placeholder="Breed, color, spayed or castrated, distinct markings..." required></textarea>
             </div>
 
-            <div class="checkbox-group">
-                <input type="checkbox" id="paid" name="Paid" value="Yes">
-                <label for="paid">Paid</label>
+            <div class="checkbox-row">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="paid" name="Paid" value="Yes">
+                    <label for="paid">Paid</label>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="vaxCheck" name="ForVaccinated" value="ForVaccinated">
+                    <label for="vaxCheck">Vaccinated</label>
+                </div>
             </div>
+            
             <div id="paidError" class="error-msg">Please pay to proceed. Thank you.</div>
 
             <button type="submit" id="submitBtn">Register My Pet</button>
@@ -253,23 +258,20 @@
     <script>
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxYi4ruQ9zpJxr5U2ZsXDdg77ybsQoiT3XzB6dfRKILuuADxboZMSQCJrBC7G8y7RFjmA/exec';
 
-        // Helper function to read file as Base64 string
         const getBase64 = (file) => new Promise((resolve, reject) => {
             if (!file) return resolve(null);
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result.split(',')[1]); // extract only the Base64 chunk
+            reader.onload = () => resolve(reader.result.split(',')[1]);
             reader.onerror = error => reject(error);
         });
 
-        // Notice the 'async' added here
         document.getElementById('petForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const microchip = document.getElementById('microchip').value;
             const paid = document.getElementById('paid').checked;
             
-            // Validation Logic
             let isValid = true;
             if (!/^\d{15}$/.test(microchip)) {
                 document.getElementById('microchipError').style.display = 'block';
@@ -287,19 +289,20 @@
             document.getElementById('loading').style.display = 'block';
 
             try {
-                // Grab files
                 const stickerFile = document.getElementById('stickerFile').files[0];
                 const petPhotoFile = document.getElementById('petPhotoFile').files[0];
 
-                // Convert to Base64
                 const stickerBase64 = await getBase64(stickerFile);
                 const petPhotoBase64 = await getBase64(petPhotoFile);
 
-                // Build Form Data
                 const formData = new FormData(this);
                 formData.append('PUID', 'PET-' + Date.now());
                 
-                // Append Base64 image payload to bypass default fetch file-handling limits
+                // If checkbox is NOT checked, explicitly send empty string for Column N
+                if (!document.getElementById('vaxCheck').checked) {
+                    formData.set('ForVaccinated', '');
+                }
+
                 if (stickerFile) {
                     formData.append('StickerBase64', stickerBase64);
                     formData.append('StickerFileName', 'Sticker_' + Date.now() + '_' + stickerFile.name);
@@ -320,7 +323,6 @@
                     mode: 'no-cors'
                 })
                 .then(() => {
-                    // Show Success Message
                     document.getElementById('success-overlay').style.display = 'flex';
                 })
                 .catch(err => {
