@@ -223,12 +223,24 @@
             <div class="form-group"><label>Upload Pet Photo</label><input type="file" id="petPhotoFile" accept="image/*" required></div>
 
             <div class="form-group">
-                <label>Choose pet Gender</label>
-                <select name="Gender" required>
-                    <option value="" disabled selected>Select Gender</option>
+                <label>Choose pet Sex</label>
+                <select name="Sex" required>
+                    <option value="" disabled selected>Select Sex</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Unknown">Unknown / Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Pet Type</label>
+                <select name="Type" required>
+                    <option value="" disabled selected>Select Pet Type</option>
+                    <option value="Dog">Dog</option>
+                    <option value="Cat">Cat</option>
+                    <option value="Bird">Bird</option>
+                    <option value="Reptile">Reptile</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
 
@@ -291,6 +303,7 @@
                 const stickerBase64 = await getBase64(stickerFile);
                 const petPhotoBase64 = await getBase64(petPhotoFile);
 
+                // FormData automatically grabs inputs/selects with "name" attributes (like "Sex" and "Type")
                 const formData = new FormData(this);
                 formData.append('PUID', 'PET-' + Date.now());
                 
