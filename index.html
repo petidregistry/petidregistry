@@ -190,6 +190,16 @@
             letter-spacing: 2px;
         }
 
+        /* Utility class to hide autofill traps without using display:none */
+        .visually-hidden {
+            position: absolute;
+            opacity: 0;
+            height: 0;
+            width: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
         @media (max-width: 480px) {
             .form-container { padding: 25px; }
             h1 { margin-bottom: 25px; }
@@ -206,16 +216,22 @@
 
         <h1>Register Pet</h1>
         
-        <form id="petForm">
-            <div class="form-group"><label>First Name</label><input type="text" name="OwnerFirstName" required></div>
-            <div class="form-group"><label>Last Name</label><input type="text" name="OwnerSecondName" required></div>
-            <div class="form-group"><label>Email</label><input type="email" name="Email" required></div>
-            <div class="form-group"><label>Phone</label><input type="tel" name="Phone" required></div>
-            <div class="form-group"><label>Pet Name</label><input type="text" name="PetName" required></div>
+        <form id="petForm" autocomplete="off">
+            <div class="visually-hidden" aria-hidden="true">
+                <input type="text" name="trap_username" autocomplete="username" tabindex="-1">
+                <input type="password" name="trap_password" autocomplete="current-password" tabindex="-1">
+                <input type="email" name="trap_email" autocomplete="email" tabindex="-1">
+            </div>
+
+            <div class="form-group"><label>First Name</label><input type="text" name="OwnerFirstName" required autocomplete="nope" spellcheck="false"></div>
+            <div class="form-group"><label>Last Name</label><input type="text" name="OwnerSecondName" required autocomplete="nope" spellcheck="false"></div>
+            <div class="form-group"><label>Email</label><input type="email" name="Email" required autocomplete="nope" spellcheck="false"></div>
+            <div class="form-group"><label>Phone</label><input type="tel" name="Phone" required autocomplete="nope"></div>
+            <div class="form-group"><label>Pet Name</label><input type="text" name="PetName" required autocomplete="nope" spellcheck="false"></div>
             
             <div class="form-group">
                 <label>Choose pet Sex</label>
-                <select name="Sex" required>
+                <select name="Sex" required autocomplete="nope">
                     <option value="" disabled selected>Select Sex</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
@@ -225,7 +241,7 @@
 
             <div class="form-group">
                 <label>Pet Type</label>
-                <select name="Type" required>
+                <select name="Type" required autocomplete="nope">
                     <option value="" disabled selected>Select Pet Type</option>
                     <option value="Dog">Dog</option>
                     <option value="Cat">Cat</option>
@@ -235,11 +251,11 @@
                 </select>
             </div>
 
-            <div class="form-group"><label>Clinic</label><input type="text" name="Clinic" required></div>
+            <div class="form-group"><label>Clinic</label><input type="text" name="Clinic" required autocomplete="nope" spellcheck="false"></div>
 
             <div class="form-group">
                 <label>Microchip Number</label>
-                <input type="text" id="microchip" name="Microchip" required>
+                <input type="text" id="microchip" name="Microchip" required autocomplete="nope">
                 <div id="microchipError" class="error-msg">The Microchip Number is invalid. Please try again.</div>
             </div>
 
@@ -248,7 +264,7 @@
 
             <div class="form-group">
                 <label>Please add description</label>
-                <textarea name="Description" rows="3" placeholder="Breed, color, spayed or castrated, distinct markings..." required></textarea>
+                <textarea name="Description" rows="3" placeholder="Breed, color, spayed or castrated, distinct markings..." required autocomplete="nope" spellcheck="false"></textarea>
             </div>
 
             <div class="checkbox-row">
@@ -306,9 +322,14 @@
                 const stickerBase64 = await getBase64(stickerFile);
                 const petPhotoBase64 = await getBase64(petPhotoFile);
 
-                // FormData automatically grabs inputs/selects with "name" attributes (like "Sex", "Type", and our new "Clinic")
+                // FormData automatically grabs inputs/selects with "name" attributes
                 const formData = new FormData(this);
                 formData.append('PUID', 'PET-' + Date.now());
+                
+                // Cleanup: remove our trap fields from the formData payload before sending
+                formData.delete('trap_username');
+                formData.delete('trap_password');
+                formData.delete('trap_email');
                 
                 if (stickerFile) {
                     formData.append('StickerBase64', stickerBase64);
