@@ -235,6 +235,8 @@
                 </select>
             </div>
 
+            <div class="form-group"><label>Clinic</label><input type="text" name="Clinic" required></div>
+
             <div class="form-group">
                 <label>Microchip Number</label>
                 <input type="text" id="microchip" name="Microchip" required>
@@ -264,7 +266,8 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwWN-a5ZTavcQBthPJZDhs0H3Hs0gbefBlOD0zpnAtz2U5FqHxCx_2tpI2LufmDl4hsoA/exec';
+        // Ensure you update this with your new deployment URL if you make a new deployment in Apps Script
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxWbRBPIhArIqfr3LMvbRJ1LYyEbbpfRhc9iNfA46O0uYJ-pyUZslPM93RjSvMtKrbZIg/exec';
 
         const getBase64 = (file) => new Promise((resolve, reject) => {
             if (!file) return resolve(null);
@@ -303,7 +306,7 @@
                 const stickerBase64 = await getBase64(stickerFile);
                 const petPhotoBase64 = await getBase64(petPhotoFile);
 
-                // FormData automatically grabs inputs/selects with "name" attributes (like "Sex" and "Type")
+                // FormData automatically grabs inputs/selects with "name" attributes (like "Sex", "Type", and our new "Clinic")
                 const formData = new FormData(this);
                 formData.append('PUID', 'PET-' + Date.now());
                 
