@@ -15,6 +15,7 @@
             --bg-color: #23257b; 
             --neon-blue: #00f3ff;
             --neon-blue-dark: #0055ff;
+            --neon-purple: #d500f9;
             --error-red: #ff0055;
             --text-light: #e0f7fa;
         }
@@ -115,8 +116,8 @@
 
         .checkbox-row {
             display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+            flex-direction: column;
+            gap: 15px;
             margin: 25px 0;
         }
 
@@ -126,12 +127,70 @@
             gap: 12px;
         }
 
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
         input[type="checkbox"] {
             width: 20px;
             height: 20px;
             cursor: pointer;
             accent-color: var(--neon-blue);
         }
+
+        /* --- Creative Price Listing Styles --- */
+        .price-tiers {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-left: 32px;
+        }
+
+        .price-badge {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--neon-blue-dark);
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: 'Tektur', sans-serif;
+            font-size: 14px;
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            cursor: default;
+            flex: 1;
+            text-align: center;
+        }
+
+        .price-badge span {
+            display: block;
+            color: var(--neon-blue);
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 5px;
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
+        }
+
+        .price-badge:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 12px rgba(0, 243, 255, 0.2);
+            transform: translateY(-2px);
+            background: rgba(0, 243, 255, 0.05);
+        }
+
+        .price-badge.premium {
+            border-color: var(--neon-purple);
+        }
+
+        .price-badge.premium span {
+            color: var(--neon-purple);
+            text-shadow: 0 0 8px rgba(213, 0, 249, 0.4);
+        }
+
+        .price-badge.premium:hover {
+            box-shadow: 0 0 12px rgba(213, 0, 249, 0.3);
+            background: rgba(213, 0, 249, 0.05);
+        }
+        /* ------------------------------------- */
 
         .error-msg {
             color: var(--error-red);
@@ -194,6 +253,9 @@
         @media (max-width: 480px) {
             .form-container { padding: 25px; }
             h1 { margin-bottom: 25px; }
+            .price-tiers { margin-left: 0; flex-direction: column; gap: 10px; }
+            .price-badge { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; }
+            .price-badge span { margin-top: 0; }
         }
     </style>
 </head>
@@ -261,7 +323,21 @@
             <div class="checkbox-row">
                 <div class="checkbox-group">
                     <input type="checkbox" id="paid" name="Paid" value="Yes">
-                    <label for="paid">Basic: $50.0 USD Standard: $100.0 USD Premium: $150.0 USD Paid</label>
+                    <label for="paid">Select Tier & Confirm Payment</label>
+                </div>
+                <div class="price-tiers">
+                    <div class="price-badge">
+                        Basic
+                        <span>$50.00</span>
+                    </div>
+                    <div class="price-badge">
+                        Standard
+                        <span>$100.00</span>
+                    </div>
+                    <div class="price-badge premium">
+                        Premium
+                        <span>$150.00</span>
+                    </div>
                 </div>
             </div>
             <div id="paidError" class="error-msg">Please pay to proceed. Thank you.</div>
